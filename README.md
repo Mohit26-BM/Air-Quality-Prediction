@@ -1,4 +1,4 @@
-# Interpretable Air Quality Severity Assessment System
+# An Interpretable Air Quality Severity Assessment System
 
 A full-stack machine learning application that predicts Air Quality Index (AQI) for 25 Indian cities and explains every prediction using SHAP (SHapley Additive exPlanations). Built as an LPU capstone project, the system goes beyond standard AQI prediction by treating interpretability and cross-temporal validation as first-class requirements.
 
