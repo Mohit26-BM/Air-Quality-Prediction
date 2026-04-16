@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block title %}Model Insights{% endblock %}
+{% block page_title %}Model Insights{% endblock %}
+{% block page_subtitle %}
+XGBoost performance, SHAP feature importance and model selection evidence
+{% endblock %}
+{% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/insights.css') }}"
+/>
+{% endblock %}
+{% block header_actions %}
+<a href="{{ url_for('predict_page') }}" class="btn btn-primary">
+  Try Prediction
+</a>
+<a href="{{ url_for('validation_page') }}" class="btn btn-outline">
+  See Validation
+</a>
+{% endblock %}
+{% block content %}
+
+<div class="grid-4 mb-lg">
+  <div class="stat-card perf-card">
+    <span class="stat-card-label">R2 Score</span>
+    <span class="stat-card-value" style="color: var(--teal-400)">0.9489</span>
+    <span class="stat-card-sub">Test set 2019-2020</span>
+  </div>
+  <div class="stat-card perf-card">
+    <span class="stat-card-label">Mean Abs. Error</span>
+    <span class="stat-card-value" style="color: var(--teal-400)">12.47</span>
+    <span class="stat-card-sub">ug/m3 on AQI scale 0-500</span>
+  </div>
+  <div class="stat-card perf-card">
+    <span class="stat-card-label">RMSE</span>
+    <span class="stat-card-value" style="color: var(--teal-400)">18.85</span>
+    <span class="stat-card-sub">Root mean squared error</span>
+  </div>
+  <div class="stat-card perf-card">
+    <span class="stat-card-label">Features</span>
+    <span class="stat-card-value" style="color: var(--teal-400)">33</span>
+    <span class="stat-card-sub">Pollutants, lags, temporal</span>
+  </div>
+</div>
+
+<div class="card mb-lg">
+  <h2 class="card-title">Model Comparison Leaderboard</h2>
+  <p class="card-subtitle">
+    All models evaluated on chronological test set (2019-2020) - no random
+    splitting. Two naive baselines establish the performance floor.
+  </p>
+
+  <div class="leaderboard-tabs mb-md">
+    <button class="lb-tab active" data-metric="r2" type="button">R2</button>
+    <button class="lb-tab" data-metric="mae" type="button">MAE</button>
+    <button class="lb-tab" data-metric="rmse" type="button">RMSE</button>
+  </div>
+
+  <div id="leaderboard-chart" style="height: 320px"></div>
+
+  <table class="data-table mt-lg" id="leaderboard-table">
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th class="text-right">R2</th>
+        <th class="text-right">MAE</th>
+        <th class="text-right">RMSE</th>
+        <th class="text-right">Type</th>
+      </tr>
+    </thead>
+    <tbody id="leaderboard-body"></tbody>
+  </table>
+</div>
+
+<div class="grid-2 mb-lg">
+  <div class="card">
+    <h2 class="card-title">Global Feature Importance</h2>
+    <p class="card-subtitle">
+      Mean |SHAP| across all test predictions - top 15 features
+    </p>
+    <div id="shap-bar-chart" style="height: 420px"></div>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">Importance by Feature Category</h2>
+    <p class="card-subtitle">Total SHAP contribution grouped by feature type</p>
+    <div id="shap-category-chart" style="height: 240px"></div>
+
+    <hr class="divider" />
+
+    <h2 class="card-title" style="margin-top: var(--space-md)">
+      Seasonal SHAP Shift
+    </h2>
+    <p class="card-subtitle">
+      How feature importance changes winter vs monsoon
+    </p>
+    <div id="shap-seasonal-chart" style="height: 200px"></div>
+  </div>
+</div>
+
+<div class="card mb-lg">
+  <h2 class="card-title">Feature Engineering Rationale</h2>
+  <p class="card-subtitle">
+    Why each feature group was added and what it captures
+  </p>
+  <div class="feature-eng-grid">
+    <div class="feature-eng-item">
+      <div class="feature-eng-header">
+        <span class="feature-eng-tag pollutant">Pollutant</span>
+        <span class="feature-eng-count">11 features</span>
+      </div>
+      <h3 class="feature-eng-title">Raw measurements</h3>
+      <p class="feature-eng-desc">
+        PM2.5, PM10, NO, NO2, NOx, NH3, CO, SO2, O3, Benzene, Toluene. Primary
+        physical drivers of AQI. PM2.5 is the single strongest predictor (SHAP
+        rank #1, mean |SHAP| = 40.05).
+      </p>
+    </div>
+
+    <div class="feature-eng-item">
+      <div class="feature-eng-header">
+        <span class="feature-eng-tag lag">Lag</span>
+        <span class="feature-eng-count">12 features</span>
+      </div>
+      <h3 class="feature-eng-title">Temporal persistence</h3>
+      <p class="feature-eng-desc">
+        PM2.5, NO2, CO, O3 at lag-1, lag-3, lag-7 days. Captures atmospheric
+        persistence - yesterday's PM2.5 is rank #2 (mean |SHAP| = 28.28),
+        reflecting that pollution does not disappear overnight.
+      </p>
+    </div>
+
+    <div class="feature-eng-item">
+      <div class="feature-eng-header">
+        <span class="feature-eng-tag temporal">Temporal</span>
+        <span class="feature-eng-count">5 features</span>
+      </div>
+      <h3 class="feature-eng-title">Cyclical encoding</h3>
+      <p class="feature-eng-desc">
+        Month and day-of-year encoded as sin/cos pairs. Preserves continuity -
+        December and January are adjacent, not 11 months apart. Year added as
+        linear trend to capture gradual air quality improvement.
+      </p>
+    </div>
+
+    <div class="feature-eng-item">
+      <div class="feature-eng-header">
+        <span class="feature-eng-tag rolling">Rolling</span>
+        <span class="feature-eng-count">4 features</span>
+      </div>
+      <h3 class="feature-eng-title">Momentum statistics</h3>
+      <p class="feature-eng-desc">
+        7-day mean and 3-day max for PM2.5 and NO2. Captures sustained pollution
+        episodes vs sudden spikes. The 3-day peak is more informative than the
+        7-day mean for acute health warning scenarios.
+      </p>
+    </div>
+
+    <div class="feature-eng-item">
+      <div class="feature-eng-header">
+        <span class="feature-eng-tag spatial">Spatial</span>
+        <span class="feature-eng-count">1 feature</span>
+      </div>
+      <h3 class="feature-eng-title">City context</h3>
+      <p class="feature-eng-desc">
+        Target-encoded city mean AQI. Encodes each city's historical pollution
+        baseline as a single numeric feature. Preferred over one-hot encoding
+        for tree models - avoids high cardinality while preserving city
+        identity.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-lg">
+  <h2 class="card-title">Hyperparameter Tuning Summary</h2>
+  <p class="card-subtitle">
+    Three search strategies evaluated - untuned model selected based on MAE, the
+    primary health-relevant metric
+  </p>
+  <table class="data-table" id="tuning-table">
+    <thead>
+      <tr>
+        <th>Strategy</th>
+        <th class="text-right">Combinations</th>
+        <th class="text-right">Folds</th>
+        <th class="text-right">Total Fits</th>
+        <th class="text-right">Best CV MAE</th>
+        <th class="text-right">Test R2</th>
+        <th class="text-right">Test MAE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="highlight">
+        <td><strong>Untuned (selected)</strong></td>
+        <td class="text-right mono">-</td>
+        <td class="text-right mono">-</td>
+        <td class="text-right mono">-</td>
+        <td class="text-right mono">-</td>
+        <td class="text-right mono">0.9489</td>
+        <td class="text-right mono">12.47</td>
+      </tr>
+      <tr>
+        <td>Full GridSearchCV</td>
+        <td class="text-right mono">144</td>
+        <td class="text-right mono">5</td>
+        <td class="text-right mono">720</td>
+        <td class="text-right mono">24.70</td>
+        <td class="text-right mono">0.9447</td>
+        <td class="text-right mono">12.96</td>
+      </tr>
+      <tr>
+        <td>Reduced GridSearchCV</td>
+        <td class="text-right mono">16</td>
+        <td class="text-right mono">5</td>
+        <td class="text-right mono">80</td>
+        <td class="text-right mono">25.12</td>
+        <td class="text-right mono">0.9488</td>
+        <td class="text-right mono">13.00</td>
+      </tr>
+      <tr>
+        <td>RandomizedSearchCV</td>
+        <td class="text-right mono">50</td>
+        <td class="text-right mono">5</td>
+        <td class="text-right mono">250</td>
+        <td class="text-right mono">25.02</td>
+        <td class="text-right mono">0.9450</td>
+        <td class="text-right mono">12.87</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tuning-note mt-md">
+    All three search strategies returned tuned models that underperformed on MAE
+    relative to defaults. XGBoost default parameters (learning_rate=0.05,
+    max_depth=6, n_estimators=500) are near-optimal for this dataset -
+    consistent with literature on tabular environmental data.
+  </p>
+</div>
+
+<script type="application/json" id="model-metrics-data">
+  {{ model_metrics | tojson }}
+</script>
+<script type="application/json" id="shap-global-data">
+  {{ shap_global | tojson }}
+</script>
+
+{% endblock %}
+{% block extra_js %}
+<script>
+  const MODEL_METRICS = JSON.parse(
+    document.getElementById("model-metrics-data").textContent,
+  );
+  const SHAP_GLOBAL = JSON.parse(
+    document.getElementById("shap-global-data").textContent,
+  );
+</script>
+<script src="{{ url_for('static', filename='js/insights.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,243 @@
+/* =============================================
+   predict.css â€” Predict page styles
+   ============================================= */
+
+/* â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.predict-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: var(--space-lg);
+  align-items: flex-start;
+}
+
+/* â”€â”€ Pollutant Grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.pollutant-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+/* â”€â”€ SHAP rank badge on label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.shap-rank {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  background: var(--teal-50);
+  color: var(--teal-400);
+  border: 1px solid rgba(29, 158, 117, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 1px 4px;
+  margin-left: 4px;
+  vertical-align: middle;
+  font-weight: 500;
+}
+
+.form-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.shap-rank-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: var(--space-sm);
+}
+
+/* â”€â”€ Predict Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.predict-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 14px;
+  font-size: 0.95rem;
+}
+
+/* â”€â”€ Empty State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.result-empty {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-empty-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+  padding: var(--space-2xl);
+}
+
+.result-empty-icon {
+  width: 80px;
+  height: 80px;
+  opacity: 0.5;
+}
+
+.result-empty-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.result-empty-hint {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  background: var(--gray-50);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+}
+
+.result-panel {
+  display: none;
+}
+
+.shap-chart {
+  height: 260px;
+}
+
+/* â”€â”€ AQI Result Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.result-aqi-card {
+  border-width: 2px;
+  transition: border-color 0.3s;
+}
+
+.result-aqi-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-lg);
+}
+
+.result-city-date {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-mono);
+}
+
+.result-aqi-value {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+  transition: color 0.3s;
+}
+
+.result-aqi-unit {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.result-aqi-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-sm);
+  min-width: 200px;
+}
+
+.aqi-badge-lg {
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  transition: background 0.3s;
+}
+
+/* â”€â”€ AQI Progress Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.result-aqi-bar-wrap {
+  width: 100%;
+  height: 8px;
+  background: var(--gray-100);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
+}
+
+.result-aqi-bar {
+  height: 100%;
+  border-radius: 99px;
+  transition:
+    width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.3s;
+  width: 0%;
+}
+
+.result-aqi-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* â”€â”€ Advice Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.advice-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  border-left: 3px solid var(--teal-400);
+  transition: border-color 0.3s;
+}
+
+.advice-icon-wrap {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--teal-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal-400);
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+.advice-text {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  padding-top: 6px;
+}
+
+/* â”€â”€ Explanation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.explanation-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  font-style: italic;
+}
+
+/* â”€â”€ Input Summary Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.impact-positive {
+  color: var(--coral-400);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.impact-negative {
+  color: var(--green-400);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+/* â”€â”€ Loading state on button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.predict-btn.loading {
+  opacity: 0.75;
+  pointer-events: none;
+}

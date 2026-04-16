@@ -1,0 +1,315 @@
+/* =============================================
+   explorer.css â€” City Explorer
+   ============================================= */
+
+/* â”€â”€ Header controls â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.explorer-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-lg);
+}
+
+.explorer-controls .form-group {
+  min-width: 160px;
+}
+
+/* â”€â”€ Multi-city selector â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.city-multi-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.city-multi-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.city-add-select {
+  min-width: 140px;
+  max-width: 160px;
+}
+
+/* â”€â”€ City tags â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.city-tags {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.city-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.city-tag.city-color-0,
+.profile-card.city-color-0,
+.profile-aqi-value.city-color-0,
+.legend-dot.city-color-0 {
+  background-color: #1d9e75;
+  color: #1d9e75;
+}
+
+.city-tag.city-color-1,
+.profile-card.city-color-1,
+.profile-aqi-value.city-color-1,
+.legend-dot.city-color-1 {
+  background-color: #ef9f27;
+  color: #ef9f27;
+}
+
+.city-tag.city-color-2,
+.profile-card.city-color-2,
+.profile-aqi-value.city-color-2,
+.legend-dot.city-color-2 {
+  background-color: #e24b4a;
+  color: #e24b4a;
+}
+
+.city-tag.city-color-0,
+.city-tag.city-color-1,
+.city-tag.city-color-2 {
+  color: #ffffff;
+}
+
+.profile-card.city-color-0,
+.profile-card.city-color-1,
+.profile-card.city-color-2 {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+
+.profile-card.city-color-0 {
+  border-top: 3px solid #1d9e75;
+}
+
+.profile-card.city-color-1 {
+  border-top: 3px solid #ef9f27;
+}
+
+.profile-card.city-color-2 {
+  border-top: 3px solid #e24b4a;
+}
+
+.profile-aqi-value.city-color-0 {
+  color: #1d9e75;
+}
+
+.profile-aqi-value.city-color-1 {
+  color: #ef9f27;
+}
+
+.profile-aqi-value.city-color-2 {
+  color: #e24b4a;
+}
+
+.legend-dot.city-color-0 {
+  background: #1d9e75;
+}
+
+.legend-dot.city-color-1 {
+  background: #ef9f27;
+}
+
+.legend-dot.city-color-2 {
+  background: #e24b4a;
+}
+
+.city-tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  font-size: 10px;
+  line-height: 1;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.city-tag-remove:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* â”€â”€ Profile cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.profile-row {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.profile-card {
+  flex: 1;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: border-top-color 0.3s;
+}
+
+.profile-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.profile-city-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--teal-800);
+}
+
+.profile-city-year {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-top: 2px;
+}
+
+.profile-aqi-side {
+  text-align: right;
+}
+
+.profile-badge {
+  margin-top: 8px;
+  display: inline-flex;
+}
+
+.profile-aqi-value {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.profile-aqi-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: right;
+  margin-top: 2px;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border);
+}
+
+.profile-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.profile-stat-value {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* â”€â”€ Chart legend â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.chart-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.card-title-compact {
+  margin-bottom: 0;
+}
+
+.card-subtitle-tight {
+  margin-top: 4px;
+}
+
+.chart-trend {
+  height: 300px;
+}
+
+.chart-large {
+  height: 320px;
+}
+
+.chart-medium {
+  height: 240px;
+}
+
+/* â”€â”€ Table scroll â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.table-scroll {
+  overflow-x: auto;
+}
+
+/* â”€â”€ Month category badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.month-cat {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.month-cat.good {
+  background: var(--aqi-good);
+}
+
+.month-cat.satisfactory {
+  background: var(--aqi-satisfactory);
+}
+
+.month-cat.moderate {
+  background: var(--aqi-moderate);
+}
+
+.month-cat.poor {
+  background: var(--aqi-poor);
+}
+
+.month-cat.very-poor {
+  background: var(--aqi-verypoor);
+}
+
+.month-cat.severe {
+  background: var(--aqi-severe);
+}

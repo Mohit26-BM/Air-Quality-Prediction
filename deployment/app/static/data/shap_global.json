@@ -1,0 +1,200 @@
+[
+  {
+    "feature": "PM2.5",
+    "shap": 40.0462,
+    "rank": 1,
+    "category": "pollutant"
+  },
+  {
+    "feature": "PM2.5_lag1",
+    "shap": 28.2753,
+    "rank": 2,
+    "category": "lag"
+  },
+  {
+    "feature": "PM10",
+    "shap": 9.8908,
+    "rank": 3,
+    "category": "pollutant"
+  },
+  {
+    "feature": "CO",
+    "shap": 5.9661,
+    "rank": 4,
+    "category": "pollutant"
+  },
+  {
+    "feature": "city_aqi_mean",
+    "shap": 3.7154,
+    "rank": 5,
+    "category": "spatial"
+  },
+  {
+    "feature": "O3",
+    "shap": 3.4372,
+    "rank": 6,
+    "category": "pollutant"
+  },
+  {
+    "feature": "year",
+    "shap": 2.4531,
+    "rank": 7,
+    "category": "temporal"
+  },
+  {
+    "feature": "NOx",
+    "shap": 2.1973,
+    "rank": 8,
+    "category": "pollutant"
+  },
+  {
+    "feature": "PM2.5_roll3_max",
+    "shap": 1.6561,
+    "rank": 9,
+    "category": "rolling"
+  },
+  {
+    "feature": "PM2.5_lag7",
+    "shap": 1.229,
+    "rank": 10,
+    "category": "lag"
+  },
+  {
+    "feature": "NO2_lag1",
+    "shap": 1.1646,
+    "rank": 11,
+    "category": "lag"
+  },
+  {
+    "feature": "NO2",
+    "shap": 1.1253,
+    "rank": 12,
+    "category": "pollutant"
+  },
+  {
+    "feature": "SO2",
+    "shap": 0.9951,
+    "rank": 13,
+    "category": "pollutant"
+  },
+  {
+    "feature": "CO_lag1",
+    "shap": 0.8558,
+    "rank": 14,
+    "category": "lag"
+  },
+  {
+    "feature": "O3_lag1",
+    "shap": 0.8255,
+    "rank": 15,
+    "category": "lag"
+  },
+  {
+    "feature": "NH3",
+    "shap": 0.8139,
+    "rank": 16,
+    "category": "pollutant"
+  },
+  {
+    "feature": "day_of_year_cos",
+    "shap": 0.7906,
+    "rank": 17,
+    "category": "temporal"
+  },
+  {
+    "feature": "NO",
+    "shap": 0.6921,
+    "rank": 18,
+    "category": "pollutant"
+  },
+  {
+    "feature": "Benzene",
+    "shap": 0.6222,
+    "rank": 19,
+    "category": "pollutant"
+  },
+  {
+    "feature": "CO_lag3",
+    "shap": 0.6197,
+    "rank": 20,
+    "category": "lag"
+  },
+  {
+    "feature": "PM2.5_lag3",
+    "shap": 0.6012,
+    "rank": 21,
+    "category": "lag"
+  },
+  {
+    "feature": "O3_lag3",
+    "shap": 0.5594,
+    "rank": 22,
+    "category": "lag"
+  },
+  {
+    "feature": "Toluene",
+    "shap": 0.5561,
+    "rank": 23,
+    "category": "pollutant"
+  },
+  {
+    "feature": "day_of_year_sin",
+    "shap": 0.552,
+    "rank": 24,
+    "category": "temporal"
+  },
+  {
+    "feature": "NO2_roll3_max",
+    "shap": 0.5229,
+    "rank": 25,
+    "category": "rolling"
+  },
+  {
+    "feature": "NO2_lag7",
+    "shap": 0.5086,
+    "rank": 26,
+    "category": "lag"
+  },
+  {
+    "feature": "PM2.5_roll7_mean",
+    "shap": 0.4812,
+    "rank": 27,
+    "category": "rolling"
+  },
+  {
+    "feature": "CO_lag7",
+    "shap": 0.4607,
+    "rank": 28,
+    "category": "lag"
+  },
+  {
+    "feature": "NO2_roll7_mean",
+    "shap": 0.4511,
+    "rank": 29,
+    "category": "rolling"
+  },
+  {
+    "feature": "O3_lag7",
+    "shap": 0.4391,
+    "rank": 30,
+    "category": "lag"
+  },
+  {
+    "feature": "month_cos",
+    "shap": 0.3359,
+    "rank": 31,
+    "category": "temporal"
+  },
+  {
+    "feature": "NO2_lag3",
+    "shap": 0.3228,
+    "rank": 32,
+    "category": "lag"
+  },
+  {
+    "feature": "month_sin",
+    "shap": 0.2403,
+    "rank": 33,
+    "category": "temporal"
+  }
+]

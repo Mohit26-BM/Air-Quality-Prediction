@@ -1,0 +1,357 @@
+{% extends "base.html" %} {% block title %}Predict AQI{% endblock %} {% block
+page_title %}Predict AQI{% endblock %} {% block page_subtitle %}Enter pollutant
+readings to receive an AQI prediction with SHAP-based explanation{% endblock %}
+{% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/predict.css') }}"
+/>
+{% endblock %} {% block header_actions %}
+<button class="btn btn-secondary" id="fill-avg-btn" type="button">
+  <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+    <path
+      d="M10 4v12M4 10h12"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    />
+  </svg>
+  Use City Average
+</button>
+{% endblock %} {% block content %}
+
+<div class="predict-layout">
+  <!-- ── Left: Input Form ──────────────────── -->
+  <div class="predict-left">
+    <!-- City + Date -->
+    <div class="card mb-md">
+      <h2 class="card-title">Location & Date</h2>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="city-select">City</label>
+          <select class="form-select" id="city-select">
+            {% for city in cities %}
+            <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="date-input">Date</label>
+          <input
+            class="form-input"
+            type="date"
+            id="date-input"
+            value="2019-11-15"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Pollutants -->
+    <div class="card mb-md">
+      <h2 class="card-title">Pollutant Readings</h2>
+      <p class="card-subtitle">All values in μg/m³ unless noted</p>
+
+      <div class="pollutant-grid">
+        <div class="form-group">
+          <label class="form-label" for="inp-pm25">
+            PM2.5
+            <span class="shap-rank" title="SHAP rank #1">#1</span>
+          </label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-pm25"
+            min="0"
+            max="500"
+            step="0.1"
+            value="120"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-pm10">
+            PM10
+            <span class="shap-rank" title="SHAP rank #3">#3</span>
+          </label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-pm10"
+            min="0"
+            max="600"
+            step="0.1"
+            value="200"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-no2">
+            NO₂
+            <span class="shap-rank" title="SHAP rank #12">#12</span>
+          </label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-no2"
+            min="0"
+            step="0.1"
+            value="40"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-no">NO</label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-no"
+            min="0"
+            step="0.1"
+            value="20"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-nox"
+            >NOx
+            <span class="shap-rank" title="SHAP rank #8">#8</span>
+          </label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-nox"
+            min="0"
+            step="0.1"
+            value="60"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-nh3">NH₃</label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-nh3"
+            min="0"
+            step="0.1"
+            value="25"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-co">
+            CO
+            <span class="shap-rank" title="SHAP rank #4">#4</span>
+          </label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-co"
+            min="0"
+            step="0.01"
+            value="1.5"
+          />
+          <span class="form-hint">mg/m³</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-so2">SO₂</label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-so2"
+            min="0"
+            step="0.1"
+            value="15"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-o3">
+            O₃
+            <span class="shap-rank" title="SHAP rank #6">#6</span>
+          </label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-o3"
+            min="0"
+            step="0.1"
+            value="40"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-benzene">Benzene</label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-benzene"
+            min="0"
+            step="0.01"
+            value="2"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-toluene">Toluene</label>
+          <input
+            class="form-input"
+            type="number"
+            id="inp-toluene"
+            min="0"
+            step="0.01"
+            value="5"
+          />
+        </div>
+      </div>
+
+      <div class="shap-rank-note">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="#888780" stroke-width="1.2" />
+          <path
+            d="M8 7v4M8 5.5v.5"
+            stroke="#888780"
+            stroke-width="1.2"
+            stroke-linecap="round"
+          />
+        </svg>
+        Rank badge indicates global SHAP importance position
+      </div>
+    </div>
+
+    <button class="btn btn-primary predict-btn" id="predict-btn" type="button">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+        <circle
+          cx="10"
+          cy="10"
+          r="7"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+        <path
+          d="M10 7v3l2 2"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+      <span id="predict-btn-text">Run Prediction</span>
+    </button>
+  </div>
+
+  <!-- ── Right: Results ────────────────────── -->
+  <div class="predict-right">
+    <!-- Empty state -->
+    <div class="result-empty" id="result-empty">
+      <div class="result-empty-inner">
+        <svg viewBox="0 0 64 64" fill="none" class="result-empty-icon">
+          <circle cx="32" cy="32" r="28" stroke="#E2DFD8" stroke-width="2" />
+          <path
+            d="M20 40 Q26 24 32 32 Q38 40 44 24"
+            stroke="#E2DFD8"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            fill="none"
+          />
+          <circle cx="32" cy="32" r="4" fill="#E2DFD8" />
+        </svg>
+        <p class="result-empty-text">
+          Select a city, enter pollutant values,<br />
+          and run the prediction
+        </p>
+        <p class="result-empty-hint">
+          Use <strong>Use City Average</strong> to auto-fill typical values
+        </p>
+      </div>
+    </div>
+
+    <!-- Result panel (hidden until prediction) -->
+    <div id="result-panel" class="result-panel">
+      <!-- AQI Result -->
+      <div class="card result-aqi-card mb-md" id="result-aqi-card">
+        <div class="result-aqi-row">
+          <div>
+            <p class="result-city-date" id="result-city-date">—</p>
+            <div class="result-aqi-value" id="result-aqi-value">—</div>
+            <div class="result-aqi-unit">AQI (μg/m³ scale 0–500)</div>
+          </div>
+          <div class="result-aqi-right">
+            <span class="aqi-badge-lg" id="result-bucket-badge">—</span>
+            <div class="result-aqi-bar-wrap">
+              <div class="result-aqi-bar" id="result-aqi-bar"></div>
+            </div>
+            <div class="result-aqi-bar-labels">
+              <span>0</span>
+              <span>100</span>
+              <span>200</span>
+              <span>300</span>
+              <span>400</span>
+              <span>500+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health Advice -->
+      <div class="card advice-card mb-md" id="advice-card">
+        <div class="advice-icon-wrap" id="advice-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+            <circle
+              cx="10"
+              cy="10"
+              r="7"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <path
+              d="M10 9v4M10 7v.5"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <p class="advice-text" id="advice-text">—</p>
+      </div>
+
+      <!-- AI Explanation -->
+      <div class="card mb-md">
+        <h2 class="card-title">AI Explanation</h2>
+        <p class="explanation-text" id="explanation-text">—</p>
+      </div>
+
+      <!-- SHAP Bar Chart -->
+      <div class="card mb-md">
+        <h2 class="card-title">Top Contributing Features</h2>
+        <p class="card-subtitle">
+          Red = pushes AQI higher &nbsp;·&nbsp; Green = pushes AQI lower
+        </p>
+        <div id="shap-chart" class="shap-chart"></div>
+      </div>
+
+      <!-- Feature Values Table -->
+      <div class="card">
+        <h2 class="card-title">Input Summary</h2>
+        <table class="data-table" id="input-summary-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="text-right">Value</th>
+              <th class="text-right">SHAP Impact</th>
+            </tr>
+          </thead>
+          <tbody id="input-summary-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block extra_js %}
+<script>
+  const CITY_MONTHLY = JSON.parse('{{ city_monthly | tojson | safe }}');
+</script>
+<script src="{{ url_for('static', filename='js/predict.js') }}"></script>
+{% endblock %}

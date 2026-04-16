@@ -1,0 +1,123 @@
+{% extends "base.html" %} {% block title %}Dashboard{% endblock %} {% block
+page_title %}Predictions Dashboard{% endblock %} {% block page_subtitle %}Live
+log of all AQI queries made through the prediction interface{% endblock %} {%
+block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/dashboard.css') }}"
+/>
+{% endblock %} {% block header_actions %}
+<button class="btn btn-secondary" id="refresh-btn" type="button">
+  <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+    <path
+      d="M4 10a6 6 0 1 0 1.5-3.9M4 6v4h4"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+  Refresh
+</button>
+{% endblock %} {% block content %}
+
+<!-- ── Summary Stats ──────────────────────── -->
+<div class="grid-4 mb-lg" id="summary-cards">
+  <div class="stat-card">
+    <span class="stat-card-label">Total Predictions</span>
+    <span class="stat-card-value" id="stat-total">—</span>
+    <span class="stat-card-sub">All time</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-card-label">Average Predicted AQI</span>
+    <span class="stat-card-value teal" id="stat-avg-aqi">—</span>
+    <span class="stat-card-sub">Across all queries</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-card-label">Most Queried City</span>
+    <span class="stat-card-value" id="stat-top-city" style="font-size: 1.4rem"
+      >—</span
+    >
+    <span class="stat-card-sub" id="stat-top-city-count"></span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-card-label">Most Common Bucket</span>
+    <span class="stat-card-value" id="stat-top-bucket" style="font-size: 1.4rem"
+      >—</span
+    >
+    <span class="stat-card-sub">Across all predictions</span>
+  </div>
+</div>
+
+<!-- ── Charts Row ─────────────────────────── -->
+<div class="grid-2 mb-lg">
+  <div class="card">
+    <h2 class="card-title">Predictions by AQI Category</h2>
+    <p class="card-subtitle">Distribution of predicted severity levels</p>
+    <div id="bucket-chart" style="height: 260px"></div>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">Queries by City</h2>
+    <p class="card-subtitle">Which cities have been queried most</p>
+    <div id="city-chart" style="height: 260px"></div>
+  </div>
+</div>
+
+<!-- ── Recent Predictions Table ──────────── -->
+<div class="card">
+  <div class="flex-between mb-md">
+    <div>
+      <h2 class="card-title" style="margin-bottom: 0">Recent Predictions</h2>
+      <p class="card-subtitle" style="margin-top: 4px">
+        Last 20 queries — newest first
+      </p>
+    </div>
+    <span class="text-muted text-sm" id="last-updated"></span>
+  </div>
+
+  <!-- Empty state -->
+  <div id="table-empty" class="dashboard-empty" style="display: none">
+    <svg viewBox="0 0 48 48" fill="none" width="48" height="48">
+      <circle cx="24" cy="24" r="20" stroke="#E2DFD8" stroke-width="1.5" />
+      <path
+        d="M16 30l5-6 4 3 4-5 4 4"
+        stroke="#E2DFD8"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <p>No predictions yet — make a query on the Predict page</p>
+  </div>
+
+  <!-- Loading state -->
+  <div id="table-loading" class="dashboard-loading">
+    <div class="spinner"></div>
+    <span>Loading predictions...</span>
+  </div>
+
+  <!-- Table -->
+  <div id="table-wrap" style="display: none; overflow-x: auto">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>City</th>
+          <th>Date</th>
+          <th class="text-right">Predicted AQI</th>
+          <th>Category</th>
+          <th>Top Feature</th>
+          <th class="text-right">SHAP</th>
+          <th>Explanation</th>
+          <th class="text-right">Queried At</th>
+        </tr>
+      </thead>
+      <tbody id="predictions-body"></tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %} {% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

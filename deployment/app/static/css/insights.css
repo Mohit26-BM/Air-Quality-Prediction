@@ -1,0 +1,108 @@
+/* =============================================
+   insights.css — Model Insights page
+   ============================================= */
+
+/* ── Leaderboard tabs ───────────────────────── */
+.leaderboard-tabs {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.lb-tab {
+  padding: 6px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.825rem;
+  font-weight: 500;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+}
+
+.lb-tab:hover {
+  border-color: var(--teal-400);
+  color: var(--teal-400);
+}
+
+.lb-tab.active {
+  background: var(--teal-400);
+  border-color: var(--teal-400);
+  color: #ffffff;
+}
+
+/* ── Feature engineering grid ───────────────── */
+.feature-eng-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-md);
+}
+
+.feature-eng-item {
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+}
+
+.feature-eng-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.feature-eng-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 99px;
+  color: #ffffff;
+}
+
+.feature-eng-tag.pollutant {
+  background: var(--teal-400);
+}
+.feature-eng-tag.lag {
+  background: var(--amber-400);
+}
+.feature-eng-tag.temporal {
+  background: var(--coral-400);
+}
+.feature-eng-tag.rolling {
+  background: var(--green-400);
+}
+.feature-eng-tag.spatial {
+  background: var(--gray-400);
+}
+
+.feature-eng-count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.feature-eng-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--teal-800);
+  margin-bottom: var(--space-xs);
+}
+
+.feature-eng-desc {
+  font-size: 0.775rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* ── Tuning note ────────────────────────────── */
+.tuning-note {
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  background: var(--teal-50);
+  border-left: 3px solid var(--teal-400);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  line-height: 1.6;
+}

@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block page_title %}About The Project{% endblock %}
+{% block page_subtitle %}
+Interpretable AQI assessment across Indian cities, with model transparency and validation built in
+{% endblock %}
+{% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/about.css') }}"
+/>
+{% endblock %}
+{% block header_actions %}
+<a href="{{ url_for('predict_page') }}" class="btn btn-primary">Try Prediction</a>
+<a href="{{ url_for('insights_page') }}" class="btn btn-outline">Model Insights</a>
+{% endblock %}
+{% block content %}
+<section class="opening-statement mb-lg">
+  <span class="eyebrow">Project Statement</span>
+  <h2 class="opening-title">What this project is and why it was built</h2>
+  <div class="opening-copy">
+    <p>
+      This project presents an interpretable air-quality assessment system that
+      predicts AQI from pollutant readings while also explaining the strongest
+      drivers behind each prediction. It was built to move beyond black-box
+      forecasting and toward a form of environmental intelligence that is easier
+      to justify, communicate, and evaluate.
+    </p>
+    <p>
+      The application combines prediction, explainability, comparative
+      literature positioning, and validation evidence in one interface. The goal
+      is not only to estimate AQI severity, but also to show why the model
+      behaves as it does and where its methodology is stronger or more limited
+      than prior work.
+    </p>
+  </div>
+</section>
+
+<section class="grid-3 mb-lg">
+  <article class="about-pill-card">
+    <span class="about-pill">Prediction</span>
+    <h3>Regression-first AQI assessment</h3>
+    <p>
+      The system predicts continuous AQI values and then maps them to severity
+      buckets, preserving more detail than classification-only approaches.
+    </p>
+  </article>
+  <article class="about-pill-card">
+    <span class="about-pill">Interpretability</span>
+    <h3>Per-prediction explanations</h3>
+    <p>
+      SHAP values identify which pollutants and temporal features push AQI up or
+      down for each individual case.
+    </p>
+  </article>
+  <article class="about-pill-card">
+    <span class="about-pill">Validation</span>
+    <h3>Cross-temporal reality check</h3>
+    <p>
+      Model behavior is compared against independent CPCB 2024 evidence to test
+      whether learned patterns still hold outside the training window.
+    </p>
+  </article>
+</section>
+
+<section class="card narrative-card mb-lg">
+  <div class="section-heading">
+    <div>
+      <span class="section-kicker">System Story</span>
+      <h2 class="card-title">Why this system exists</h2>
+    </div>
+  </div>
+  <div class="narrative-grid">
+    <p>
+      Most air-quality models stop at the prediction itself. This project pushes
+      further by treating explainability as a first-class requirement. Instead
+      of returning a number with no context, the system connects the AQI result
+      to its strongest pollutant drivers and temporal signals.
+    </p>
+    <p>
+      The design is meant for academic demonstration and decision-support
+      storytelling. That is why the app includes a predictor, model insights,
+      validation evidence, and this project narrative in one place.
+    </p>
+  </div>
+</section>
+
+<section class="card methodology-card mb-lg">
+  <div class="section-heading">
+    <div>
+      <span class="section-kicker">Methodology</span>
+      <h2 class="card-title">Pipeline from raw records to interpretable output</h2>
+      <p class="card-subtitle">
+        A document-style overview of the main stages used to build and justify
+        the system.
+      </p>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <article class="timeline-step">
+      <span class="timeline-index">01</span>
+      <div class="timeline-body">
+        <h3>Data audit</h3>
+        <p>
+          CPCB-derived records were screened for authenticity, missingness, and
+          anomalies before modeling decisions were made.
+        </p>
+      </div>
+    </article>
+    <article class="timeline-step">
+      <span class="timeline-index">02</span>
+      <div class="timeline-body">
+        <h3>Quality control</h3>
+        <p>
+          Null handling was tiered by severity, temporal outliers were examined,
+          and risky data patterns were filtered rather than ignored.
+        </p>
+      </div>
+    </article>
+    <article class="timeline-step">
+      <span class="timeline-index">03</span>
+      <div class="timeline-body">
+        <h3>Feature engineering</h3>
+        <p>
+          Cyclical seasonal encoding, lag variables, rolling statistics, and
+          city-level context were introduced to capture temporal persistence.
+        </p>
+      </div>
+    </article>
+    <article class="timeline-step">
+      <span class="timeline-index">04</span>
+      <div class="timeline-body">
+        <h3>Model comparison</h3>
+        <p>
+          Baselines and multiple regressors were tested using chronological
+          evaluation, with XGBoost selected on overall generalization quality.
+        </p>
+      </div>
+    </article>
+    <article class="timeline-step">
+      <span class="timeline-index">05</span>
+      <div class="timeline-body">
+        <h3>Explanation and validation</h3>
+        <p>
+          SHAP outputs were used for feature-level explanations and then checked
+          against external 2024 evidence for consistency.
+        </p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="comparison" class="card comparison-card mb-lg">
+  <div class="section-heading comparison-heading">
+    <div>
+      <span class="section-kicker">Literature Review</span>
+      <h2 class="card-title">How the project compares with related work</h2>
+      <p class="card-subtitle">
+        Switch between comparison lenses to see where the present study is
+        stronger and where prior work still has an advantage.
+      </p>
+    </div>
+    <div class="comparison-controls" role="tablist" aria-label="Comparison view">
+      <button
+        id="comparison-tab-strengths"
+        class="comparison-tab active"
+        data-view="strengths"
+        type="button"
+        role="tab"
+        aria-selected="true"
+        aria-controls="comparison-panel-strengths"
+        tabindex="0"
+      >
+        Present Study
+      </button>
+      <button
+        id="comparison-tab-gaps"
+        class="comparison-tab"
+        data-view="gaps"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="comparison-panel-gaps"
+        tabindex="-1"
+      >
+        Prior Work Advantages
+      </button>
+    </div>
+  </div>
+
+  <div class="comparison-panels">
+    <div
+      id="comparison-panel-strengths"
+      class="comparison-panel active"
+      data-panel="strengths"
+      role="tabpanel"
+      aria-labelledby="comparison-tab-strengths"
+      tabindex="0"
+    >
+      <div class="comparison-grid">
+        <article class="comparison-item">
+          <h3>Methodological rigor</h3>
+          <p>
+            Chronological splitting, baseline models, and explicit data audit
+            practices make the reported performance more believable.
+          </p>
+        </article>
+        <article class="comparison-item">
+          <h3>Explainability</h3>
+          <p>
+            SHAP is used both globally and locally, giving the system a real
+            explanation layer absent in the reviewed papers.
+          </p>
+        </article>
+        <article class="comparison-item">
+          <h3>Validation depth</h3>
+          <p>
+            Independent 2024 CPCB evidence is used to test whether learned
+            patterns generalize across time and source.
+          </p>
+        </article>
+        <article class="comparison-item">
+          <h3>Scale</h3>
+          <p>
+            The project spans many cities rather than staying within a single
+            city or an unspecified regional slice.
+          </p>
+        </article>
+      </div>
+    </div>
+
+    <div
+      id="comparison-panel-gaps"
+      class="comparison-panel"
+      data-panel="gaps"
+      role="tabpanel"
+      aria-labelledby="comparison-tab-gaps"
+      tabindex="0"
+      hidden
+    >
+      <div class="comparison-grid">
+        <article class="comparison-item warning">
+          <h3>Meteorological features</h3>
+          <p>
+            Paper 2 includes temperature, pressure, humidity, and wind speed,
+            which remain a major future-improvement area for this project.
+          </p>
+        </article>
+        <article class="comparison-item warning">
+          <h3>Health outcomes</h3>
+          <p>
+            Paper 1 links AQI patterns to health indicators more directly, while
+            this system uses AQI as a proxy for severity communication.
+          </p>
+        </article>
+        <article class="comparison-item warning">
+          <h3>Station-level granularity</h3>
+          <p>
+            Some prior work operates closer to monitoring-station detail, whereas
+            this project stays at city-level resolution.
+          </p>
+        </article>
+        <article class="comparison-item warning">
+          <h3>Real-time ingestion</h3>
+          <p>
+            The current application demonstrates interpretable prediction well,
+            but it is not yet a live streaming AQI platform.
+          </p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="grid-2 mb-lg">
+  <article class="card takeaway-card">
+    <span class="section-kicker">Limitations</span>
+    <h2 class="card-title">Known constraints</h2>
+    <ul class="about-list">
+      <li>Training data ends in 2020, so post-2020 structural shifts matter.</li>
+      <li>Meteorological drivers are not yet included in the feature space.</li>
+      <li>Predictions are city-level, not station-level micro-assessments.</li>
+      <li>Supabase logging supports app usage tracking, not real-time ingestion.</li>
+    </ul>
+  </article>
+
+  <article class="card takeaway-card">
+    <span class="section-kicker">Next Steps</span>
+    <h2 class="card-title">Where the system can grow</h2>
+    <ul class="about-list">
+      <li>Add meteorological and satellite-derived context variables.</li>
+      <li>Extend validation with more recent and more granular data.</li>
+      <li>Introduce station-aware modeling for within-city comparisons.</li>
+      <li>Expand the app toward live feeds and policy-facing reporting.</li>
+    </ul>
+  </article>
+</section>
+
+<section class="card mb-lg">
+  <h2 class="card-title">References</h2>
+  <ol class="reference-list">
+    <li>
+      Sasikala S., Shalini R., Renuka Devi D., Chinnapparaj D.
+      <em>Real Time Air Quality Analytics of Chennai and its Implications on Health.</em>
+      Urban India, Vol. 43(I), January-June 2023.
+    </li>
+    <li>
+      Halsana S.
+      <em>Air Quality Prediction Model using Supervised Machine Learning Algorithms.</em>
+      IJSRCSEIT, Vol. 6, Issue 4, July-August 2020.
+    </li>
+    <li>
+      Lundberg S. M., Lee S. I.
+      <em>A Unified Approach to Interpreting Model Predictions.</em>
+      NeurIPS, 2017.
+    </li>
+    <li>
+      Chen T., Guestrin C.
+      <em>XGBoost: A Scalable Tree Boosting System.</em>
+      KDD, 2016.
+    </li>
+  </ol>
+</section>
+
+<section class="about-footer-strip">
+  <div>
+    <span class="section-kicker">Closing Note</span>
+    <h2 class="footer-title">
+      This page supports the application by clarifying its methods, evidence,
+      and future direction.
+    </h2>
+  </div>
+  <a href="{{ url_for('validation_page') }}" class="btn btn-secondary">
+    Review validation
+  </a>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/about.js') }}"></script>
+{% endblock %}

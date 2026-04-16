@@ -1,0 +1,177 @@
+{
+  "Aizawl": {
+    "mean_aqi": 33.4,
+    "best_month": 7,
+    "worst_month": 3,
+    "lat": 23.7271,
+    "lng": 92.7176
+  },
+  "Amaravati": {
+    "mean_aqi": 94.5,
+    "best_month": 7,
+    "worst_month": 12,
+    "lat": 16.513,
+    "lng": 80.5154
+  },
+  "Amritsar": {
+    "mean_aqi": 120.2,
+    "best_month": 8,
+    "worst_month": 11,
+    "lat": 31.634,
+    "lng": 74.8723
+  },
+  "Bengaluru": {
+    "mean_aqi": 94.2,
+    "best_month": 6,
+    "worst_month": 1,
+    "lat": 12.9716,
+    "lng": 77.5946
+  },
+  "Bhopal": {
+    "mean_aqi": 134.1,
+    "best_month": 9,
+    "worst_month": 11,
+    "lat": 23.2599,
+    "lng": 77.4126
+  },
+  "Brajrajnagar": {
+    "mean_aqi": 148.9,
+    "best_month": 8,
+    "worst_month": 1,
+    "lat": 21.8241,
+    "lng": 83.9196
+  },
+  "Chandigarh": {
+    "mean_aqi": 96.6,
+    "best_month": 4,
+    "worst_month": 11,
+    "lat": 30.7333,
+    "lng": 76.7794
+  },
+  "Chennai": {
+    "mean_aqi": 113.7,
+    "best_month": 4,
+    "worst_month": 1,
+    "lat": 13.0827,
+    "lng": 80.2707
+  },
+  "Coimbatore": {
+    "mean_aqi": 73.1,
+    "best_month": 6,
+    "worst_month": 10,
+    "lat": 11.0168,
+    "lng": 76.9558
+  },
+  "Delhi": {
+    "mean_aqi": 259.2,
+    "best_month": 8,
+    "worst_month": 11,
+    "lat": 28.6139,
+    "lng": 77.209
+  },
+  "Ernakulam": {
+    "mean_aqi": 90.2,
+    "best_month": 4,
+    "worst_month": 7,
+    "lat": 10.0,
+    "lng": 76.2144
+  },
+  "Gurugram": {
+    "mean_aqi": 225.0,
+    "best_month": 8,
+    "worst_month": 11,
+    "lat": 28.4595,
+    "lng": 77.0266
+  },
+  "Guwahati": {
+    "mean_aqi": 138.2,
+    "best_month": 9,
+    "worst_month": 1,
+    "lat": 26.1445,
+    "lng": 91.7362
+  },
+  "Hyderabad": {
+    "mean_aqi": 108.9,
+    "best_month": 7,
+    "worst_month": 1,
+    "lat": 17.385,
+    "lng": 78.4867
+  },
+  "Jaipur": {
+    "mean_aqi": 133.9,
+    "best_month": 8,
+    "worst_month": 11,
+    "lat": 26.9124,
+    "lng": 75.7873
+  },
+  "Jorapokhar": {
+    "mean_aqi": 159.2,
+    "best_month": 9,
+    "worst_month": 11,
+    "lat": 23.6693,
+    "lng": 86.4137
+  },
+  "Kochi": {
+    "mean_aqi": 102.1,
+    "best_month": 4,
+    "worst_month": 1,
+    "lat": 9.9312,
+    "lng": 76.2673
+  },
+  "Kolkata": {
+    "mean_aqi": 141.2,
+    "best_month": 7,
+    "worst_month": 1,
+    "lat": 22.5726,
+    "lng": 88.3639
+  },
+  "Lucknow": {
+    "mean_aqi": 217.5,
+    "best_month": 8,
+    "worst_month": 11,
+    "lat": 26.8467,
+    "lng": 80.9462
+  },
+  "Mumbai": {
+    "mean_aqi": 105.6,
+    "best_month": 7,
+    "worst_month": 12,
+    "lat": 19.076,
+    "lng": 72.8777
+  },
+  "Patna": {
+    "mean_aqi": 240.9,
+    "best_month": 7,
+    "worst_month": 12,
+    "lat": 25.5941,
+    "lng": 85.1376
+  },
+  "Shillong": {
+    "mean_aqi": 54.1,
+    "best_month": 7,
+    "worst_month": 2,
+    "lat": 25.5788,
+    "lng": 91.8933
+  },
+  "Talcher": {
+    "mean_aqi": 171.5,
+    "best_month": 9,
+    "worst_month": 1,
+    "lat": 20.9499,
+    "lng": 85.2298
+  },
+  "Thiruvananthapuram": {
+    "mean_aqi": 76.1,
+    "best_month": 6,
+    "worst_month": 1,
+    "lat": 8.5241,
+    "lng": 76.9366
+  },
+  "Visakhapatnam": {
+    "mean_aqi": 117.5,
+    "best_month": 4,
+    "worst_month": 1,
+    "lat": 17.6868,
+    "lng": 83.2185
+  }
+}

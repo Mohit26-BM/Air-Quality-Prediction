@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}City Explorer{% endblock %}
+{% block page_title %}City Explorer{% endblock %}
+{% block page_subtitle %}Explore AQI patterns, pollutant profiles and seasonal trends across Indian cities{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/explorer.css') }}">
+{% endblock %}
+
+{% block header_actions %}
+<div class="explorer-controls">
+
+    <div class="form-group">
+        <label class="form-label" for="year-select">Year</label>
+        <select class="form-select" id="year-select">
+            <option value="0">All Years (2015-2020)</option>
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+        </select>
+    </div>
+
+    <div class="city-multi-wrap">
+        <label class="form-label" for="city-add-select">Cities (up to 3)</label>
+        <div class="city-multi-row">
+            <div class="city-tags" id="city-tags"></div>
+            <select class="form-select city-add-select" id="city-add-select">
+                <option value="">Add city...</option>
+                {% for city in cities %}
+                <option value="{{ city }}">{{ city }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Profile Cards ──────────────────────────── -->
+<div class="profile-row mb-lg" id="profile-row"></div>
+
+<!-- ── AQI Trend ─────────────────────────────── -->
+<div class="card mb-lg">
+    <div class="flex-between mb-md">
+        <div>
+            <h2 class="card-title card-title-compact">
+                Monthly AQI Trend
+            </h2>
+            <p class="card-subtitle card-subtitle-tight"
+               id="trend-subtitle">Mean AQI by month</p>
+        </div>
+        <div id="trend-legend" class="chart-legend"></div>
+    </div>
+    <div id="trend-chart" class="chart-trend"></div>
+</div>
+
+<!-- ── Radar + Heatmap ───────────────────────── -->
+<div class="grid-2 mb-lg">
+
+    <div class="card">
+        <h2 class="card-title">Pollutant Profile</h2>
+        <p class="card-subtitle">
+            Relative mean concentrations across pollutants
+        </p>
+        <div id="radar-chart" class="chart-large"></div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Monthly AQI Intensity</h2>
+        <p class="card-subtitle">
+            Heatmap - darker shade = higher AQI
+        </p>
+        <div id="heatmap-chart" class="chart-large"></div>
+    </div>
+
+</div>
+
+<!-- ── Grouped Pollutant Bar + Pie ────────────── -->
+<div class="grid-2 mb-lg">
+
+    <div class="card">
+        <h2 class="card-title">Top Pollutants by Month</h2>
+        <p class="card-subtitle" id="pollutant-bar-subtitle">
+            PM2.5, PM10, NO2 mean concentrations - ug/m3
+        </p>
+        <div id="pollutant-bar-chart" class="chart-medium"></div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Pollutant Composition</h2>
+        <p class="card-subtitle">
+            Annual mean concentration share - primary city
+        </p>
+        <div id="pollutant-pie-chart" class="chart-medium"></div>
+    </div>
+
+</div>
+
+<!-- ── Monthly Table ─────────────────────────── -->
+<div class="card">
+    <div class="flex-between mb-md">
+        <div>
+            <h2 class="card-title card-title-compact">
+                Monthly Data Table
+            </h2>
+            <p class="card-subtitle card-subtitle-tight">
+                Primary city - full pollutant breakdown
+            </p>
+        </div>
+        <span class="text-muted text-sm" id="table-city-label"></span>
+    </div>
+    <div class="table-scroll">
+        <table class="data-table" id="monthly-table">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th class="text-right">AQI</th>
+                    <th class="text-right">Category</th>
+                    <th class="text-right">PM2.5</th>
+                    <th class="text-right">PM10</th>
+                    <th class="text-right">NO2</th>
+                    <th class="text-right">CO</th>
+                    <th class="text-right">O3</th>
+                    <th class="text-right">SO2</th>
+                </tr>
+            </thead>
+            <tbody id="monthly-table-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ── Data ───────────────────────────────────── -->
+<script type="application/json" id="city-monthly-data">
+{{ city_monthly | tojson }}
+</script>
+<script type="application/json" id="city-profiles-data">
+{{ city_profiles | tojson }}
+</script>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const CITY_MONTHLY  = JSON.parse(
+    document.getElementById('city-monthly-data').textContent
+);
+const CITY_PROFILES = JSON.parse(
+    document.getElementById('city-profiles-data').textContent
+);
+</script>
+<script src="{{ url_for('static', filename='js/explorer.js') }}"></script>
+{% endblock %}

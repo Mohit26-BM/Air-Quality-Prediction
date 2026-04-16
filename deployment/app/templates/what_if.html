@@ -1,0 +1,300 @@
+{% extends "base.html" %} {% block title %}What-If Lab{% endblock %} {% block
+page_title %}What-If Lab{% endblock %} {% block page_subtitle %} Test how city
+context and pollutant shifts change predicted AQI in real time {% endblock %} {%
+block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/what_if.css') }}"
+/>
+{% endblock %} {% block header_actions %}
+<button class="btn btn-secondary" id="load-baseline-btn" type="button">
+  Load Baseline
+</button>
+<button class="btn btn-outline" id="reset-scenario-btn" type="button">
+  Reset Lab
+</button>
+{% endblock %} {% block content %}
+<section class="card whatif-intro mb-lg">
+  <div>
+    <span class="section-kicker">Interactive Scenario</span>
+    <h2 class="card-title">Explore how pollutant changes move the model</h2>
+    <p class="card-subtitle">
+      Choose a city and month, then adjust the core pollutant sliders. The page
+      re-runs the AQI model instantly through a preview endpoint, so you can
+      compare the scenario against the city-month baseline without logging every
+      slider movement.
+    </p>
+  </div>
+  <div class="whatif-intro-pills">
+    <span class="whatif-pill">Live AQI response</span>
+    <span class="whatif-pill">Bucket presets</span>
+    <span class="whatif-pill">Top driver feedback</span>
+  </div>
+</section>
+
+<div class="whatif-layout mb-lg">
+  <section class="card whatif-controls">
+    <div class="whatif-control-head">
+      <div>
+        <h2 class="card-title">Scenario Controls</h2>
+        <p class="card-subtitle">
+          Core pollutants are slider-driven. Secondary pollutants are derived
+          automatically from the PM2.5 profile to keep the scenario consistent.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid-2 mb-md">
+      <div class="form-group">
+        <label class="form-label" for="whatif-city">City</label>
+        <select class="form-select" id="whatif-city">
+          {% for city in cities %}
+          <option value="{{ city }}" {% if city == "Delhi" %}selected{% endif %}>
+            {{ city }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="whatif-month">Month</label>
+        <select class="form-select" id="whatif-month">
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11" selected>November</option>
+          <option value="12">December</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="whatif-intensity card-surface mb-md">
+      <div class="whatif-intensity-head">
+        <div>
+          <h3 class="surface-title">Scenario Intensity</h3>
+          <p class="surface-copy">
+            Scale the city-month baseline up or down before fine-tuning
+            individual pollutants.
+          </p>
+        </div>
+        <span class="intensity-value" id="intensity-value">100%</span>
+      </div>
+      <label class="form-label" for="whatif-intensity"
+        >Scenario intensity slider</label
+      >
+      <input
+        type="range"
+        min="40"
+        max="170"
+        step="5"
+        value="100"
+        id="whatif-intensity"
+        class="whatif-range"
+      />
+    </div>
+
+    <div class="mb-md">
+      <div class="whatif-preset-head">
+        <h3 class="surface-title">Bucket Presets</h3>
+        <p class="surface-copy">
+          Quick scenario shifts toward common AQI severity bands. These are
+          directional presets, not exact inverse-model targets.
+        </p>
+      </div>
+      <div class="bucket-presets">
+        <button class="preset-chip" data-intensity="45" type="button">
+          Good-like
+        </button>
+        <button class="preset-chip" data-intensity="65" type="button">
+          Satisfactory-like
+        </button>
+        <button class="preset-chip" data-intensity="90" type="button">
+          Moderate-like
+        </button>
+        <button class="preset-chip active" data-intensity="100" type="button">
+          Baseline
+        </button>
+        <button class="preset-chip" data-intensity="125" type="button">
+          Poor-like
+        </button>
+        <button class="preset-chip" data-intensity="155" type="button">
+          Severe-like
+        </button>
+      </div>
+    </div>
+
+    <div class="slider-grid" id="slider-grid">
+      <article class="slider-card">
+        <div class="slider-head">
+          <label class="slider-label" for="slider-pm25">PM2.5</label>
+          <span class="slider-value" id="value-pm25">0</span>
+        </div>
+        <input
+          class="whatif-range"
+          id="slider-pm25"
+          type="range"
+          min="0"
+          max="350"
+          step="1"
+        />
+        <p class="slider-hint">
+          Fine particulate matter, typically the strongest AQI driver.
+        </p>
+      </article>
+      <article class="slider-card">
+        <div class="slider-head">
+          <label class="slider-label" for="slider-pm10">PM10</label>
+          <span class="slider-value" id="value-pm10">0</span>
+        </div>
+        <input
+          class="whatif-range"
+          id="slider-pm10"
+          type="range"
+          min="0"
+          max="450"
+          step="1"
+        />
+        <p class="slider-hint">
+          Coarser particulates that often rise alongside PM2.5.
+        </p>
+      </article>
+      <article class="slider-card">
+        <div class="slider-head">
+          <label class="slider-label" for="slider-no2">NO2</label>
+          <span class="slider-value" id="value-no2">0</span>
+        </div>
+        <input
+          class="whatif-range"
+          id="slider-no2"
+          type="range"
+          min="0"
+          max="180"
+          step="1"
+        />
+        <p class="slider-hint">Traffic-linked nitrogen dioxide pressure.</p>
+      </article>
+      <article class="slider-card">
+        <div class="slider-head">
+          <label class="slider-label" for="slider-co">CO</label>
+          <span class="slider-value" id="value-co">0</span>
+        </div>
+        <input
+          class="whatif-range"
+          id="slider-co"
+          type="range"
+          min="0"
+          max="5"
+          step="0.01"
+        />
+        <p class="slider-hint">Carbon monoxide concentration in mg/m3.</p>
+      </article>
+      <article class="slider-card">
+        <div class="slider-head">
+          <label class="slider-label" for="slider-o3">O3</label>
+          <span class="slider-value" id="value-o3">0</span>
+        </div>
+        <input
+          class="whatif-range"
+          id="slider-o3"
+          type="range"
+          min="0"
+          max="220"
+          step="1"
+        />
+        <p class="slider-hint">
+          Ozone effects become more visible in warmer conditions.
+        </p>
+      </article>
+      <article class="slider-card">
+        <div class="slider-head">
+          <label class="slider-label" for="slider-so2">SO2</label>
+          <span class="slider-value" id="value-so2">0</span>
+        </div>
+        <input
+          class="whatif-range"
+          id="slider-so2"
+          type="range"
+          min="0"
+          max="180"
+          step="1"
+        />
+        <p class="slider-hint">
+          Sulfur dioxide contribution from combustion sources.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <aside class="whatif-sidebar">
+    <section class="card whatif-result-card mb-md">
+      <div class="result-topline">
+        <span class="section-kicker">Predicted AQI</span>
+        <span class="result-context" id="result-context">Delhi | November</span>
+      </div>
+      <div class="result-primary">
+        <div class="result-aqi" id="whatif-aqi">-</div>
+        <span class="aqi-badge" id="whatif-bucket">Loading</span>
+      </div>
+      <div class="result-delta" id="whatif-delta">
+        Comparing against baseline...
+      </div>
+      <div class="result-meter">
+        <div class="result-meter-fill" id="whatif-meter-fill"></div>
+      </div>
+      <p class="result-advice" id="whatif-advice">-</p>
+      <p class="result-explanation" id="whatif-explanation">-</p>
+    </section>
+
+    <section class="card whatif-baseline-card">
+      <div class="baseline-head">
+        <div>
+          <span class="section-kicker">Baseline Snapshot</span>
+          <h2 class="card-title">Reference state</h2>
+        </div>
+        <span class="baseline-badge" id="baseline-badge">-</span>
+      </div>
+      <div class="baseline-metric-row">
+        <div class="baseline-metric">
+          <span class="baseline-label">Baseline AQI</span>
+          <span class="baseline-value" id="baseline-aqi">-</span>
+        </div>
+        <div class="baseline-metric">
+          <span class="baseline-label">Scenario delta</span>
+          <span class="baseline-value" id="baseline-delta">-</span>
+        </div>
+      </div>
+      <div class="baseline-list" id="baseline-list"></div>
+    </section>
+  </aside>
+</div>
+
+<div class="grid-2">
+  <section class="card">
+    <h2 class="card-title">Scenario vs Baseline</h2>
+    <p class="card-subtitle">
+      Compare the six controllable pollutants against the city-month reference.
+    </p>
+    <div id="whatif-comparison-chart" class="whatif-chart"></div>
+  </section>
+
+  <section class="card">
+    <h2 class="card-title">Top Model Drivers</h2>
+    <p class="card-subtitle">
+      The model explanation updates with each slider change, so you can see
+      which features are driving the AQI shift.
+    </p>
+    <div id="whatif-driver-chart" class="whatif-chart"></div>
+  </section>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  const CITY_MONTHLY = JSON.parse('{{ city_monthly | tojson | safe }}');
+</script>
+<script src="{{ url_for('static', filename='js/what_if.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,409 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block page_title %}Air Quality Intelligence{% endblock %}
+{% block page_subtitle %}
+Interpretable AQI prediction across 25 Indian cities - 2015 to 2020
+{% endblock %}
+{% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/index.css') }}"
+/>
+{% endblock %}
+{% block header_actions %}
+<a href="{{ url_for('predict_page') }}" class="btn btn-primary">
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+    <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5" />
+    <path
+      d="M10 7v3l2 2"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    />
+  </svg>
+  Predict AQI
+</a>
+{% endblock %}
+{% block content %}
+
+<section class="home-hero mb-lg">
+  <div class="home-hero-copy">
+    <span class="hero-kicker">Operational Overview</span>
+    <h2 class="home-hero-title">
+      Interpretable AQI prediction built for exploration, evidence, and trust.
+    </h2>
+    <p class="home-hero-text">
+      Predict AQI across 25 Indian cities, inspect the pollutant drivers behind
+      each result, and compare model behavior against independent validation
+      evidence.
+    </p>
+    <div class="home-hero-actions">
+      <a href="{{ url_for('predict_page') }}" class="btn btn-primary">
+        Predict AQI
+      </a>
+      <a
+        href="#home-capabilities"
+        class="btn btn-secondary"
+        data-scroll-target="home-capabilities"
+      >
+        Explore Features
+      </a>
+    </div>
+    <div class="hero-points">
+      <div class="hero-point">
+        <span class="hero-point-label">Prediction</span>
+        <span class="hero-point-text">Continuous AQI with category mapping</span>
+      </div>
+      <div class="hero-point">
+        <span class="hero-point-label">Explainability</span>
+        <span class="hero-point-text">SHAP-based driver analysis per prediction</span>
+      </div>
+      <div class="hero-point">
+        <span class="hero-point-label">Validation</span>
+        <span class="hero-point-text">
+          Cross-checked against independent CPCB 2024 data
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <aside class="hero-highlight-panel">
+    <div class="hero-highlight-main">
+      <span class="hero-highlight-label">Most polluted city</span>
+      <div class="hero-highlight-value">{{ top_polluted[0][0] }}</div>
+      <div class="hero-highlight-meta">
+        Mean AQI {{ "%.1f"|format(top_polluted[0][1].mean_aqi) }} during the
+        training period
+      </div>
+      <span class="aqi-badge {{ top_polluted[0][1].mean_aqi | aqi_css_class }}">
+        {{ top_polluted[0][1].mean_aqi | aqi_bucket }}
+      </span>
+    </div>
+
+    <div class="hero-highlight-grid">
+      <article class="hero-mini-stat">
+        <span class="hero-mini-label">Model R2</span>
+        <span class="hero-mini-value">0.9489</span>
+      </article>
+      <article class="hero-mini-stat">
+        <span class="hero-mini-label">Mean Abs. Error</span>
+        <span class="hero-mini-value">12.47</span>
+      </article>
+      <article class="hero-mini-stat">
+        <span class="hero-mini-label">Cleanest city</span>
+        <span class="hero-mini-value">{{ cleanest[0][0] }}</span>
+      </article>
+      <article class="hero-mini-stat">
+        <span class="hero-mini-label">Feature space</span>
+        <span class="hero-mini-value">33 features</span>
+      </article>
+    </div>
+  </aside>
+</section>
+
+<div class="grid-4 mb-lg">
+  <div class="stat-card featured-stat">
+    <span class="stat-card-label">Cities Monitored</span>
+    <span class="stat-card-value">25</span>
+    <span class="stat-card-sub">Across India, 2015-2020</span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-card-label">Model R2</span>
+    <span class="stat-card-value teal">0.9489</span>
+    <span class="stat-card-sub">XGBoost on test set 2019-20</span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-card-label">Mean Abs. Error</span>
+    <span class="stat-card-value teal">12.47</span>
+    <span class="stat-card-sub">ug/m3 on AQI scale 0-500</span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-card-label">Training Records</span>
+    <span class="stat-card-value">24.6k</span>
+    <span class="stat-card-sub">After cleaning + feature eng.</span>
+  </div>
+</div>
+
+<div id="home-capabilities" class="grid-3 mb-lg">
+  <div class="feature-card">
+    <div class="feature-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="#1D9E75" stroke-width="1.5" />
+        <path
+          d="M12 8v4l2.5 2.5"
+          stroke="#1D9E75"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </div>
+    <h3 class="feature-title">AQI Prediction</h3>
+    <p class="feature-desc">
+      Enter pollutant readings for any of 25 cities and receive an instant AQI
+      prediction with confidence context.
+    </p>
+    <a href="{{ url_for('predict_page') }}" class="feature-link">
+      Predict now
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+        <path
+          d="M3 8h10M9 4l4 4-4 4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </a>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M3 17l5-6 4 4 4-5 4 4"
+          stroke="#1D9E75"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="2"
+          stroke="#1D9E75"
+          stroke-width="1.5"
+        />
+      </svg>
+    </div>
+    <h3 class="feature-title">SHAP Explainability</h3>
+    <p class="feature-desc">
+      Every prediction is explained via SHAP values - identifying which
+      pollutants drove the AQI up or down.
+    </p>
+    <a href="{{ url_for('insights_page') }}" class="feature-link">
+      View insights
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+        <path
+          d="M3 8h10M9 4l4 4-4 4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </a>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M5 13l4 4L19 7"
+          stroke="#1D9E75"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <circle cx="12" cy="12" r="9" stroke="#1D9E75" stroke-width="1.5" />
+      </svg>
+    </div>
+    <h3 class="feature-title">External Validation</h3>
+    <p class="feature-desc">
+      Seasonal patterns validated against independent CPCB 2024 data - 5/5 SHAP
+      agreement confirmed.
+    </p>
+    <a href="{{ url_for('validation_page') }}" class="feature-link">
+      View validation
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+        <path
+          d="M3 8h10M9 4l4 4-4 4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </a>
+  </div>
+</div>
+
+<div class="card chart-spotlight mb-lg">
+  <div class="chart-spotlight-head">
+    <div>
+      <h2 class="card-title">Where air quality diverges most across cities</h2>
+      <p class="card-subtitle">
+        Mean AQI ranked across all 25 cities - training period
+      </p>
+    </div>
+    <a
+      href="#city-rankings"
+      class="chart-link"
+      data-scroll-target="city-rankings"
+    >
+      Jump to rankings
+    </a>
+  </div>
+  <div id="city-bar-chart" style="height: 360px"></div>
+</div>
+
+<div id="city-rankings" class="grid-2 mb-lg">
+  <div class="card">
+    <h2 class="card-title">Most Polluted Cities</h2>
+    <p class="card-subtitle">Annual mean AQI - training period 2015-2020</p>
+    <table class="data-table" id="top-polluted-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>City</th>
+          <th class="text-right">Mean AQI</th>
+          <th class="text-right">Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for city, profile in top_polluted %}
+        <tr>
+          <td class="text-muted">{{ loop.index }}</td>
+          <td><strong>{{ city }}</strong></td>
+          <td class="text-right mono">{{ "%.1f"|format(profile.mean_aqi) }}</td>
+          <td class="text-right">
+            <span class="aqi-badge {{ profile.mean_aqi | aqi_css_class }}">
+              {{ profile.mean_aqi | aqi_bucket }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">Cleanest Cities</h2>
+    <p class="card-subtitle">Annual mean AQI - training period 2015-2020</p>
+    <table class="data-table" id="cleanest-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>City</th>
+          <th class="text-right">Mean AQI</th>
+          <th class="text-right">Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for city, profile in cleanest %}
+        <tr>
+          <td class="text-muted">{{ loop.index }}</td>
+          <td><strong>{{ city }}</strong></td>
+          <td class="text-right mono">{{ "%.1f"|format(profile.mean_aqi) }}</td>
+          <td class="text-right">
+            <span class="aqi-badge {{ profile.mean_aqi | aqi_css_class }}">
+              {{ profile.mean_aqi | aqi_bucket }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card methodology-strip">
+  <h2 class="card-title">Why This System Is Trustworthy</h2>
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="pipeline-num">01</div>
+      <div class="pipeline-label">Data Audit</div>
+      <div class="pipeline-desc">
+        4 authenticity tests on 29,531 CPCB records
+      </div>
+    </div>
+    <div class="pipeline-arrow">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M5 12h14M13 6l6 6-6 6"
+          stroke="#888780"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-num">02</div>
+      <div class="pipeline-label">Preprocessing</div>
+      <div class="pipeline-desc">
+        Tiered null treatment, outlier removal, AQI bucket recomputation
+      </div>
+    </div>
+    <div class="pipeline-arrow">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M5 12h14M13 6l6 6-6 6"
+          stroke="#888780"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-num">03</div>
+      <div class="pipeline-label">Feature Eng.</div>
+      <div class="pipeline-desc">
+        33 features - cyclical encoding, lag, rolling stats
+      </div>
+    </div>
+    <div class="pipeline-arrow">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M5 12h14M13 6l6 6-6 6"
+          stroke="#888780"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-num">04</div>
+      <div class="pipeline-label">Modelling</div>
+      <div class="pipeline-desc">
+        5 models compared, XGBoost selected on MAE + R2
+      </div>
+    </div>
+    <div class="pipeline-arrow">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M5 12h14M13 6l6 6-6 6"
+          stroke="#888780"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-num">05</div>
+      <div class="pipeline-label">SHAP + Validation</div>
+      <div class="pipeline-desc">
+        TreeExplainer + CPCB 2024 cross-temporal validation
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block extra_js %}
+<script>
+  const CITY_PROFILES = JSON.parse('{{ city_profiles | tojson | safe }}');
+</script>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

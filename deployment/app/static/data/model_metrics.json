@@ -1,0 +1,58 @@
+[
+  {
+    "model": "Persistence",
+    "r2": 0.7383,
+    "mae": 26.77,
+    "rmse": 61.61,
+    "baseline": true,
+    "final": false
+  },
+  {
+    "model": "City Mean",
+    "r2": 0.3684,
+    "mae": 62.01,
+    "rmse": 95.7,
+    "baseline": true,
+    "final": false
+  },
+  {
+    "model": "Linear Regression",
+    "r2": 0.8918,
+    "mae": 18.99,
+    "rmse": 27.44,
+    "baseline": false,
+    "final": false
+  },
+  {
+    "model": "Decision Tree",
+    "r2": 0.8721,
+    "mae": 19.58,
+    "rmse": 29.82,
+    "baseline": false,
+    "final": false
+  },
+  {
+    "model": "Random Forest",
+    "r2": 0.9416,
+    "mae": 12.66,
+    "rmse": 20.15,
+    "baseline": false,
+    "final": false
+  },
+  {
+    "model": "Gradient Boosting",
+    "r2": 0.9451,
+    "mae": 13.81,
+    "rmse": 19.54,
+    "baseline": false,
+    "final": false
+  },
+  {
+    "model": "XGBoost",
+    "r2": 0.9489,
+    "mae": 12.47,
+    "rmse": 18.85,
+    "baseline": false,
+    "final": true
+  }
+]

@@ -1,0 +1,192 @@
+{% extends "base.html" %} {% block title %}Validation{% endblock %} {% block
+page_title %}External Validation{% endblock %} {% block page_subtitle %}Model
+patterns validated against independent CPCB 2024 data — not seen during
+training{% endblock %} {% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/validation.css') }}"
+/>
+{% endblock %} {% block header_actions %}
+<div class="form-group" style="min-width: 160px">
+  <label class="form-label">City</label>
+  <select class="form-select" id="val-city-select">
+    {% for city in cities %}
+    <option value="{{ city }}" {% if city == "Delhi" %}selected{% endif %}>
+      {{ city }}
+    </option>
+    {% endfor %}
+  </select>
+</div>
+{% endblock %} {% block content %}
+
+<!-- ── Validation Summary Cards ───────────── -->
+<div class="grid-4 mb-lg">
+  <div class="stat-card">
+    <span class="stat-card-label">Seasonal Alignment</span>
+    <span class="stat-card-value" style="color: var(--teal-400)">5/5</span>
+    <span class="stat-card-sub">Cities — Winter > Monsoon confirmed</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-card-label">SHAP Agreement</span>
+    <span class="stat-card-value" style="color: var(--teal-400)">5/5</span>
+    <span class="stat-card-sub">Pollutant prominence vs CPCB 2024</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-card-label">Validation Gap</span>
+    <span class="stat-card-value" style="color: var(--teal-400)">4 yr</span>
+    <span class="stat-card-sub">Training 2015–20 vs CPCB 2024</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-card-label">AQI Reduction</span>
+    <span class="stat-card-value" style="color: var(--coral-400)">−19–37%</span>
+    <span class="stat-card-sub">2024 vs training baseline</span>
+  </div>
+</div>
+
+<!-- ── City Seasonal Comparison ──────────── -->
+<div class="card mb-lg">
+  <div class="flex-between mb-md">
+    <div>
+      <h2 class="card-title" style="margin-bottom: 0">
+        Seasonal Pattern Comparison
+      </h2>
+      <p class="card-subtitle" style="margin-top: 4px" id="seasonal-subtitle">
+        Training 2015–2020 vs CPCB 2024 — monthly mean AQI
+      </p>
+    </div>
+    <div class="val-legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background: var(--teal-400)"></div>
+        Training 2015–20
+      </div>
+      <div class="legend-item">
+        <div
+          class="legend-dot"
+          style="
+            background: var(--amber-400);
+            border: 2px dashed var(--amber-400);
+            background: transparent;
+            width: 18px;
+            height: 2px;
+            border-radius: 0;
+          "
+        ></div>
+        CPCB 2024
+      </div>
+    </div>
+  </div>
+  <div id="seasonal-chart" style="height: 300px"></div>
+</div>
+
+<!-- ── Monthly Diff + Alignment Table ────── -->
+<div class="grid-2 mb-lg">
+  <div class="card">
+    <h2 class="card-title">Monthly AQI Difference</h2>
+    <p class="card-subtitle">
+      CPCB 2024 minus training mean — negative = improvement
+    </p>
+    <div id="diff-chart" style="height: 260px"></div>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">Five-City Alignment Check</h2>
+    <p class="card-subtitle">Winter > Monsoon pattern preserved in 2024</p>
+    <table class="data-table" id="alignment-table">
+      <thead>
+        <tr>
+          <th>City</th>
+          <th class="text-right">Train Winter</th>
+          <th class="text-right">2024 Winter</th>
+          <th class="text-right">Train Monsoon</th>
+          <th class="text-right">2024 Monsoon</th>
+          <th class="text-right">Aligned?</th>
+        </tr>
+      </thead>
+      <tbody id="alignment-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── Pollutant Prominence ───────────────── -->
+<div class="card mb-lg">
+  <h2 class="card-title">Prominent Pollutant Validation — Delhi</h2>
+  <p class="card-subtitle">
+    CPCB 2024 daily records vs SHAP seasonal findings. Independent cross-source
+    confirmation that model learned real atmospheric chemistry.
+  </p>
+
+  <div class="prominence-grid">
+    <div class="prominence-panel">
+      <h3 class="prominence-season winter-label">Winter (Nov–Feb)</h3>
+      <div id="prominence-winter-chart" style="height: 220px"></div>
+    </div>
+
+    <div class="prominence-panel">
+      <h3 class="prominence-season monsoon-label">Monsoon (Jul–Aug)</h3>
+      <div id="prominence-monsoon-chart" style="height: 220px"></div>
+    </div>
+
+    <div class="prominence-agreement">
+      <h3 class="prominence-season">SHAP Agreement</h3>
+      <div id="agreement-table-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── COVID + Annual Comparison ─────────── -->
+<div class="grid-2 mb-lg">
+  <div class="card">
+    <h2 class="card-title">Annual Mean AQI Comparison</h2>
+    <p class="card-subtitle">
+      Training baseline vs CPCB 2024 — all five cities
+    </p>
+    <div id="annual-comparison-chart" style="height: 280px"></div>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">Delhi Nov–Dec Severity</h2>
+    <p class="card-subtitle">Statistical improvement vs experiential reality</p>
+    <div id="winter-severity-chart" style="height: 280px"></div>
+    <p class="severity-note mt-md">
+      Mean AQI improved 386 → 333 (−52.9 μg/m³) but 2024 median Nov–Dec remains
+      346 — Very Poor. Statistical improvement is imperceptible at ground level.
+      Both baselines are uniformly hazardous.
+    </p>
+  </div>
+</div>
+
+<!-- ── Limitation Note ────────────────────── -->
+<div class="val-limitation-strip">
+  <div class="val-limitation-icon">
+    <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+      <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5" />
+      <path
+        d="M10 9v4M10 7v.5"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      />
+    </svg>
+  </div>
+  <div>
+    <strong>Systematic overestimation after 2020.</strong>
+    All five cities show 13–37% lower AQI in 2024 vs the 2015–2020 training
+    baseline — attributed to BS6 fuel standards, increased EV adoption, and
+    stricter CPCB enforcement. The model will systematically overpredict current
+    AQI. Retraining on 2021–2024 data is recommended before deployment.
+  </div>
+</div>
+
+<!-- ── Data ───────────────────────────────── -->
+<script type="application/json" id="validation-data">
+  {{ validation_data | tojson }}
+</script>
+
+{% endblock %} {% block extra_js %}
+<script>
+  const VALIDATION_DATA = JSON.parse(
+    document.getElementById("validation-data").textContent,
+  );
+</script>
+<script src="{{ url_for('static', filename='js/validation.js') }}"></script>
+{% endblock %}
