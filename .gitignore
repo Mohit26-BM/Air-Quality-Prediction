@@ -17,3 +17,7 @@ presentation/
 # raw data
 data/*.xlsx
 data/data.csv
+
+docs/
+.hintrc
+deployment/app/.hintrc
