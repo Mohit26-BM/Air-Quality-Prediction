@@ -1,0 +1,19 @@
+# secrets
+.env
+deployment/app/.env
+
+# python
+__pycache__/
+*.pyc
+
+# outputs
+outputs/
+output.txt
+
+# docs / presentation
+docs/papers/
+presentation/
+
+# raw data
+data/*.xlsx
+data/data.csv
